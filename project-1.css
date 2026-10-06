@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    color:rgb(228, 179, 32);
+}
+
+p{
+    color:rgb(13, 12, 1);
+}
+
+h2{
+    color:blueviolet
+}
+
+.food-card{
+    color:rgb(243, 94, 53);
+    background-color:rgb(101, 18, 11);
+}
+
+#home{
+    background-color: rgb(55, 211, 50);
+}
+
