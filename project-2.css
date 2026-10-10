@@ -1,0 +1,45 @@
+*
+{
+    box-sizing:border-box;
+}
+
+body{
+    background: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+h1{
+    color:#2c3e50;
+    font-size:42px;
+    text-align: center;
+}
+
+.intro{
+    color:green;
+    font-size:28px;
+    text-align:center;
+}
+
+.container{
+    display:flex;
+    justify-content:ceneter;
+}
+
+.card{
+    width:350px;
+    padding:10px;
+    border:30px solid #7a5bc4;
+    text-align:center;
+    margin: 20px auto;
+    background-color: #baa3f0;
+}
+
+
+.card h2{
+    color:rgb(118, 9, 87);
+    font-size:30px;
+}
+
+.card p{
+    line-height: 1.9;
+}

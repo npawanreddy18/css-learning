@@ -4,7 +4,7 @@
 }
 
 h1{
-    color:rgb(228, 179, 32);
+    color:rgb(155, 123, 27);
 }
 
 p{
@@ -12,12 +12,12 @@ p{
 }
 
 h2{
-    color:blueviolet
+    color:rgb(131, 129, 134)
 }
 
 .food-card{
     color:rgb(243, 94, 53);
-    background-color:rgb(101, 18, 11);
+    background-color:rgb(87, 13, 6);
 }
 
 #home{
