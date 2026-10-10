@@ -1,25 +1,272 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lr-css</title>
-    <link rel="stylesheet" href="project-2.css">
+
+    <meta name="description" content="Tomato - Fresh and delicious food delivery to your doorstep">
+
+    <title>Tomato Food Delivery Store</title>
+
+    <link rel="icon" href="images/mapp.jpg">
+    <link rel="stylesheet" href="project-3.css">
 </head>
+
 <body>
-    <h1>About Me</h1>
-    <p class="intro">Hi, I am learning web design. </p>
 
-    <div class="container">
-    <div class="card">
-        <h2>My Hobbies</h2>
-        <p>Playing, Dancing, Learning, Making and Coding.</p>
-    </div>
+    <!-- Header -->
+    <header>
+        <h1>Welcome to Tomato Food Delivery Store</h1>
+        <p>Fresh and delicious food delivered to your doorstep.</p>
 
-    <div class="card">
-        <h2>My Hobbies</h2>
-        <p>Playing, Dancing, Learning, Making and Coding.</p>
-    </div>
-    </div>
+        <!-- Navigation -->
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#menu">Menu</a>
+            <a href="#order">My Orders</a>
+            <a href="#offers">Offers</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- Home Section -->
+        <section id="home">
+            <h2>Welcome to Tomato</h2>
+            <p>Order your favourite food!</p>
+            <a href="#menu">Explore Menu</a>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu">
+            <h2>Our Menu</h2>
+            <p>Check out our delicious food.</p>
+
+            <a href="#order" class="floating-order">Order Now</a>
+            <br><br>
+            <!-- All food cards must stay inside this container -->
+            <div class="food-container">
+
+                <!-- Pizza Card -->
+                <article class="food-card">
+                    <h3>Pizza</h3>
+                    <img src="images/pizza.jpg" alt="Delicious pizza">
+                    <p>Delicious pizza</p>
+                    <p>Price: &#8377;299</p>
+                    <button type="button">Add to Cart</button>
+                </article>
+
+                <!-- Burger Card -->
+                <article class="food-card">
+                    <h3>Burger</h3>
+                    <img src="images/burger2.jpg" alt="Delicious burger">
+                    <p>Delicious burger</p>
+                    <p>Price: &#8377;150</p>
+                    <button type="button">Add to Cart</button>
+                </article>
+
+                <!-- Noodles Card -->
+                <article class="food-card">
+                    <h3>Noodles</h3>
+                    <img src="images/noodles.jpg" alt="Delicious noodles">
+                    <p>Delicious noodles</p>
+                    <p>Price: &#8377;120</p>
+                    <button type="button">Add to Cart</button>
+                </article>
+
+                <!-- Biryani Card -->
+                <article class="food-card">
+                    <h3>Biryani</h3>
+                    <img src="images/biryani.jpg" alt="Delicious biryani">
+                    <p>Delicious biryani</p>
+                    <p>Price: &#8377;180</p>
+                    <button type="button">Add to Cart</button>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Offers Section -->
+        <section id="offers">
+            <h2>Special Offers</h2>
+
+            <aside>
+                <h3>Your Order Offers</h3>
+                <p>Get 15% off on your first order!</p>
+                <p>Use Code: TOMATO15</p>
+            </aside>
+        </section>
+
+        <!-- Order Section -->
+        <section id="order">
+            <h2>Place Your Order</h2>
+
+            <form>
+                <label for="name">Name:</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your name"
+                    autocomplete="name"
+                    required
+                >
+                <br><br>
+
+                <label for="email">Email:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+                <br><br>
+
+                <label for="phone">Phone:</label>
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    pattern="[0-9]{10}"
+                    placeholder="Enter your 10-digit number"
+                    autocomplete="tel"
+                    required
+                >
+                <br><br>
+
+                <label for="address">Delivery Address:</label>
+                <br>
+                <textarea
+                    id="address"
+                    name="address"
+                    rows="5"
+                    cols="40"
+                    placeholder="Enter your delivery address"
+                    autocomplete="street-address"
+                    required
+                ></textarea>
+                <br><br>
+
+                <label for="food">Select Food:</label>
+                <select id="food" name="food" required>
+                    <option value="">-- Select Food --</option>
+                    <option value="pizza">Pizza</option>
+                    <option value="burger">Burger</option>
+                    <option value="noodles">Noodles</option>
+                    <option value="biryani">Biryani</option>
+                </select>
+                <br><br>
+
+                <label for="quantity">Quantity:</label>
+                <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    max="10"
+                    value="1"
+                    required
+                >
+                <br><br>
+
+                <p>Payment Method:</p>
+
+                <input
+                    type="radio"
+                    id="cash"
+                    name="payment"
+                    value="cash"
+                    required
+                >
+                <label for="cash">Cash on Delivery</label>
+                <br>
+
+                <input
+                    type="radio"
+                    id="card"
+                    name="payment"
+                    value="card"
+                >
+                <label for="card">Credit/Debit Card</label>
+                <br>
+
+                <input
+                    type="radio"
+                    id="upi"
+                    name="payment"
+                    value="upi"
+                >
+                <label for="upi">UPI</label>
+                <br><br>
+
+                <button type="submit">Place Order</button>
+                <button type="reset">Reset</button>
+            </form>
+        </section>
+
+        <!-- Food Music Section -->
+        <section id="food-music">
+            <h2>Our Food Music</h2>
+
+            <audio controls>
+                <source src="food.mp3" type="audio/mpeg">
+                Your browser does not support audio.
+            </audio>
+        </section>
+
+        <!-- Food Video Section -->
+        <section id="food-video">
+            <h2>Food Video</h2>
+
+            <video controls width="400">
+                <source src="food.mp4" type="video/mp4">
+                Your browser does not support video.
+            </video>
+        </section>
+
+        <!-- Location Section -->
+        <section id="location">
+            <h2>Our Location</h2>
+
+            <iframe
+                src="https://www.google.com/maps"
+                width="600"
+                height="400"
+                title="Tomato Food Delivery Location"
+                loading="lazy"
+            ></iframe>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <h2>About Tomato</h2>
+            <p>
+                Tomato is a food delivery website offering delicious
+                meals delivered to your doorstep.
+            </p>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>Phone: 123-456-7890</p>
+            <p>Email: info@restaurant.com</p>
+            <p>Address: Bengaluru, Karnataka, India</p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Tomato. All rights reserved.</p>
+        <p><a href="#home">Back to Top</a></p>
+    </footer>
+
 </body>
 </html>

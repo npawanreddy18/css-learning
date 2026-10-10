@@ -1,45 +1,484 @@
-*
-{
-    box-sizing:border-box;
+/* =====================================
+   1. CSS VARIABLES
+   ===================================== */
+
+:root {
+    --primary-color: #d94325;
+    --button-color: tomato;
+    --page-background: #fffaf5;
+    --card-background: #ffffff;
+    --card-radius: 12px;
+    --text-color: #222222;
 }
 
-body{
-    background: #f4f4f4;
+
+/* =====================================
+   2. UNIVERSAL SELECTOR & BOX MODEL
+   ===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =====================================
+   3. BODY & GENERAL TEXT
+   ===================================== */
+
+body {
     font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: var(--text-color);
+    background-color: var(--page-background);
+    line-height: 1.6;
 }
 
-h1{
-    color:#2c3e50;
-    font-size:42px;
+h1,
+h2,
+h3 {
+    font-weight: bold;
+}
+
+section h2 {
+    font-size: 1.625rem;
+    margin-bottom: 12px;
+}
+
+
+/* =====================================
+   4. HEADER
+   ===================================== */
+
+header {
+    background-color: white;
+    padding: 25px;
+    border-bottom: 3px solid var(--primary-color);
+}
+
+header h1 {
+    color: var(--primary-color);
+    font-size: 2rem;
     text-align: center;
+    margin-bottom: 8px;
 }
 
-.intro{
-    color:green;
-    font-size:28px;
-    text-align:center;
-}
-
-.container{
-    display:flex;
-    justify-content:ceneter;
-}
-
-.card{
-    width:350px;
-    padding:10px;
-    border:30px solid #7a5bc4;
-    text-align:center;
-    margin: 20px auto;
-    background-color: #baa3f0;
+header p {
+    color: #555555;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 
-.card h2{
-    color:rgb(118, 9, 87);
-    font-size:30px;
+/* =====================================
+   5. NAVIGATION
+   ===================================== */
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
-.card p{
-    line-height: 1.9;
+nav a {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: var(--button-color);
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: var(--primary-color);
+}
+
+
+/* =====================================
+   6. MAIN CONTENT
+   ===================================== */
+
+main {
+    padding: 20px;
+}
+
+
+/* =====================================
+   7. HOME SECTION & GRADIENT
+   ===================================== */
+
+#home {
+    background: linear-gradient(135deg, #fff0d9, #ffb39f);
+    padding: 30px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+}
+
+#home h2 {
+    color: #267b35;
+}
+
+#home p {
+    margin-bottom: 12px;
+}
+
+#home a {
+    display: inline-block;
+    background-color: #267b35;
+    color: white;
+    padding: 10px 18px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#home a:hover {
+    background-color: #195d27;
+}
+
+
+/* =====================================
+   8. MENU SECTION
+   ===================================== */
+
+#menu {
+    padding: 20px 0;
+}
+
+#menu > h2 {
+    color: var(--primary-color);
+}
+
+#menu > p {
+    margin-bottom: 20px;
+}
+
+
+/* =====================================
+   9. CSS GRID - FOOD LAYOUT
+   ===================================== */
+
+.food-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* =====================================
+   10. FOOD CARDS
+   ===================================== */
+
+.food-card {
+    width: 100%;
+    min-width: 0;
+    padding: 1rem;
+    border: 2px solid #f3c5b8;
+    border-radius: var(--card-radius);
+    background-color: var(--card-background);
+
+    /* Shadow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+    /* Smooth animation */
+    transition: transform 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.food-card h3 {
+    color: var(--primary-color);
+    font-size: 1.375rem;
+    margin-bottom: 10px;
+}
+
+.food-card img {
+    display: block;
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.food-card p {
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.food-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =====================================
+   11. BUTTONS
+   ===================================== */
+
+button {
+    background-color: var(--button-color);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    margin-top: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: bold;
+
+    transition: background-color 0.3s ease,
+                transform 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--primary-color);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+
+/* =====================================
+   12. SPECIAL OFFERS
+   ===================================== */
+
+#offers {
+    background-color: #fff0d9;
+    padding: 25px;
+    margin-top: 25px;
+    border-radius: 8px;
+}
+
+#offers h2 {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+#offers aside {
+    padding: 15px;
+    background-color: white;
+    border-left: 5px solid var(--primary-color);
+    border-radius: 5px;
+}
+
+
+/* =====================================
+   13. ORDER FORM
+   ===================================== */
+
+#order {
+    padding: 25px 0;
+}
+
+#order h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+form {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+input,
+select,
+textarea {
+    max-width: 100%;
+    padding: 10px;
+    border: 1px solid #bbbbbb;
+    border-radius: 4px;
+    font: inherit;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    width: auto;
+    accent-color: var(--primary-color);
+}
+
+textarea {
+    width: 100%;
+    resize: vertical;
+}
+
+/* Focus state */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--button-color);
+    border-color: var(--primary-color);
+}
+
+/* Invalid form fields */
+input:invalid {
+    border-color: #cc3333;
+}
+
+
+/* =====================================
+   14. FLOATING ORDER BUTTON
+   ===================================== */
+
+.floating-order {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 100;
+
+    background-color: var(--button-color);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease,
+                transform 0.3s ease;
+}
+
+.floating-order:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+
+/* =====================================
+   15. AUDIO, VIDEO & MAP
+   ===================================== */
+
+#food-music,
+#food-video,
+#location {
+    margin: 25px 0;
+}
+
+#food-video video,
+#location iframe {
+    display: block;
+    max-width: 100%;
+}
+
+
+/* =====================================
+   16. ABOUT & CONTACT
+   ===================================== */
+
+#about,
+#contact {
+    padding: 25px;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+#about h2,
+#contact h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+
+/* =====================================
+   17. FOOTER
+   ===================================== */
+
+footer {
+    text-align: center;
+    background-color: #262626;
+    color: white;
+    padding: 20px;
+    margin-top: 25px;
+}
+
+footer a {
+    color: #ffd2c6;
+}
+
+
+/* =====================================
+   18. RESPONSIVE DESIGN - TABLETS
+    */
+
+@media (max-width: 900px) {
+    .food-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/*  19. RESPONSIVE DESIGN - MOBILE */
+
+@media (max-width: 600px) {
+    header {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 1.625rem;
+    }
+
+    main {
+        padding: 12px;
+    }
+
+    .food-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .food-card {
+        width: 100%;
+    }
+
+    nav {
+        gap: 6px;
+    }
+
+    nav a {
+        padding: 8px 10px;
+    }
+
+    form {
+        width: 100%;
+    }
+
+    #home {
+        padding: 20px;
+    }
+
+    #location iframe {
+        width: 100%;
+    }
+
+    .floating-order {
+        right: 12px;
+        bottom: 12px;
+    }
 }
