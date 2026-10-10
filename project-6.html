@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CineBook | Book Movie Tickets Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1020;--card:#181b30;--card2:#20244a;--red:#ff3d57;--gold:#ffc542;--text:#f2f3fa;--muted:#9a9eb8;--line:#2c3058;--r:14px}
+[data-theme=light]{--bg:#f5f6fb;--card:#fff;--card2:#eceefa;--gold:#b97d00;--text:#161833;--muted:#5d6280;--line:#d9dcee}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:Poppins,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+a{color:inherit;text-decoration:none}
+button,select,input{font-family:inherit;font-size:inherit}
+button{cursor:pointer}
+.wrap{width:min(1200px,92%);margin-inline:auto}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.hide{display:none!important}
+.btn{background:var(--red);color:#fff;border:0;border-radius:10px;padding:.7em 1.4em;font-weight:600;transition:filter .2s}
+.btn:hover{filter:brightness(1.12)}
+.btn:disabled{background:var(--card2);color:var(--muted);cursor:not-allowed;filter:none}
+.btn.ghost{background:none;border:1.5px solid var(--line);color:var(--text)}
+.btn.sm{padding:.4em 1em;font-size:.85rem}
+.btn.block{width:100%}
+.field,.sel{background:var(--card);color:var(--text);border:1.5px solid var(--line);border-radius:10px;padding:.55em .9em}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:1rem;height:68px}
+.logo{font-weight:800;font-size:1.5rem}.logo b{color:var(--red)}
+.menu{display:flex;gap:1.4rem;font-size:.92rem;color:var(--muted);margin-left:1rem}
+.menu a:hover{color:var(--text)}
+.tools{display:flex;gap:.6rem;align-items:center;margin-left:auto}
+.ib{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:99px;padding:.35em .9em;font-size:.88rem;white-space:nowrap}
+.cnt{background:var(--red);color:#fff;border-radius:99px;font-size:.7rem;font-weight:700;padding:0 .5em;margin-left:.3rem}
+.burger{display:none;background:none;border:0;color:var(--text);font-size:1.6rem}
+
+/* hero */
+.hero{position:relative;min-height:520px;display:flex;align-items:flex-end;background:#1a1d3a center top/cover no-repeat;color:#fff}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0e1020 8%,rgba(14,16,32,.65) 55%,rgba(14,16,32,.2)),linear-gradient(0deg,var(--bg),transparent 35%)}
+.hero-in{position:relative;padding:4rem 0 3.5rem;max-width:620px}
+.hero small{color:var(--gold);font-weight:600}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.08;font-weight:800;margin:.4rem 0}
+.hero p{color:#d4d7ea;margin:.6rem 0 1.4rem}
+
+/* sections */
+section{padding:3rem 0}
+.head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.4rem}
+h2{font-size:1.7rem;font-weight:700}
+.filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.4rem;align-items:center}
+.chip{background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:.35em 1.1em;font-size:.88rem}
+.chip.on,.chip:hover{background:var(--red);border-color:var(--red);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.4rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .2s}
+.card:hover{transform:translateY(-5px)}
+.poster{aspect-ratio:2/3;position:relative;background:var(--card2);overflow:hidden}
+.poster img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{height:100%;display:grid;place-content:center;text-align:center;padding:1rem;font-size:4rem;color:#fff}
+.ph small{font-size:.8rem;font-weight:600}
+.rate{position:absolute;top:10px;left:10px;background:#000b;color:var(--gold);font-weight:600;font-size:.8rem;padding:.15em .7em;border-radius:99px}
+.wl{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;border:0;background:#000b;color:#aaa;font-size:1.05rem}
+.wl.on{color:var(--red)}
+.info{padding:1rem}
+.info h3{font-size:1rem}
+.info p{color:var(--muted);font-size:.82rem;margin:.2rem 0 .8rem}
+.empty{color:var(--muted);padding:1.5rem;background:var(--card);border:1px dashed var(--line);border-radius:var(--r);text-align:center;grid-column:1/-1}
+
+/* bookings */
+.bk-list{display:grid;gap:1rem}
+.bk{display:grid;grid-template-columns:80px 1fr auto;gap:1.2rem;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1rem}
+.bk .poster{border-radius:8px}
+.bk h3{font-size:1.1rem}.bk p{color:var(--muted);font-size:.86rem}
+.bk .code{font:700 1rem monospace;letter-spacing:.15em;color:var(--gold)}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:.1em .7em;border-radius:99px;background:var(--card2);margin-left:.5rem}
+.badge.up{background:#1d6b3a;color:#fff}.badge.cx{background:#7a1f2c;color:#fff}
+.bk-side{display:grid;gap:.4rem;justify-items:stretch}
+.new{outline:2px solid var(--gold)}
+
+/* offers + faq */
+.offers{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.offer{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.4rem}
+.offer b{color:var(--gold);font-size:1.3rem;display:block}
+.offer p{color:var(--muted);font-size:.9rem;margin:.3rem 0 .8rem}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem;margin-bottom:.7rem}
+summary{font-weight:600;cursor:pointer}
+details p{color:var(--muted);margin-top:.6rem}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:2.5rem 0 1.5rem;color:var(--muted);font-size:.9rem}
+.f-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.4fr;gap:2rem}
+footer h4{color:var(--text);margin-bottom:.6rem}
+footer li{list-style:none;margin:.35rem 0}
+footer a:hover{color:var(--text)}
+.copy{text-align:center;margin-top:2rem;font-size:.8rem}
+.news{display:flex;gap:.4rem;margin-top:.5rem}.news input{flex:1;min-width:0}
+
+/* overlays */
+.overlay{position:fixed;inset:0;background:rgba(5,6,16,.82);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:2rem 1rem;z-index:100}
+.overlay.open{display:flex}
+#am{z-index:120}#tm{z-index:130}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:20px;width:min(880px,100%);padding:1.8rem;position:relative}
+.modal.sm{width:min(430px,100%)}
+.close{position:absolute;top:1rem;right:1rem;background:var(--card2);color:var(--text);border:0;width:34px;height:34px;border-radius:50%;z-index:2}
+.m-head{display:flex;gap:1.4rem;margin-bottom:1rem;flex-wrap:wrap}
+.m-poster{width:140px;border-radius:12px;overflow:hidden;flex:none;aspect-ratio:2/3}
+.m-poster .poster{height:100%}
+.m-info{flex:1;min-width:240px}
+.m-info h2{font-size:1.6rem;padding-right:2rem}
+.meta{color:var(--gold);font-size:.9rem}
+.tag{color:var(--muted);display:block;margin:.2rem 0}
+.m-info p{color:var(--muted);font-size:.92rem;margin:.5rem 0}
+.stars button{background:none;border:0;font-size:1.4rem;color:var(--line)}
+.stars button.on{color:var(--gold)}
+.steps{display:flex;gap:.3rem;list-style:none;margin:0 0 1.2rem;padding:0 2.5rem 0 0;font-size:.75rem;color:var(--muted);flex-wrap:wrap}
+.steps li{padding:.2em .8em;border-radius:99px;background:var(--card2)}
+.steps li.on{background:var(--red);color:#fff}.steps li.done{color:var(--text)}
+.label{font-weight:600;margin:1.2rem 0 .6rem}
+.opt{background:var(--card2);border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:.45em 1em;font-size:.88rem}
+.opt.on{border-color:var(--red);background:#ff3d5722}
+.opt:disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.cin{border-top:1px solid var(--line);padding:1rem 0}
+.cin-h{margin-bottom:.6rem}.cin-h small{color:var(--muted);margin-left:.6rem}
+.note{color:var(--muted);background:var(--card2);padding:.8rem 1rem;border-radius:10px;margin-top:1rem}
+
+/* seats */
+.screen{height:6px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:50%;margin:1rem auto .3rem;width:70%}
+.screen-l{text-align:center;font-size:.72rem;color:var(--muted);margin-bottom:1rem}
+.seats{display:grid;gap:.4rem;justify-content:center;overflow-x:auto;padding-bottom:.5rem}
+.tier{font-size:.74rem;color:var(--muted);text-align:center;margin-top:.5rem}
+.srow{display:flex;gap:.35rem;align-items:center;justify-content:center}
+.srow i{width:16px;font-style:normal;font-size:.72rem;color:var(--muted)}
+.seat{width:28px;height:26px;border-radius:7px 7px 3px 3px;border:0;background:#4a5090;flex:none}
+.seat.p{background:#7a6a2a}.seat.r{background:#2f7a6a;width:34px}
+.seat:hover:not(:disabled){filter:brightness(1.3)}
+.seat.sel{background:var(--red)!important}
+.seat:disabled{background:#14162b!important;opacity:.6;cursor:not-allowed}
+.gap{width:14px;flex:none}
+.legend{display:flex;gap:1rem;justify-content:center;font-size:.76rem;color:var(--muted);margin-top:1rem;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:.35rem;vertical-align:-1px;background:var(--c)}
+.summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.4rem;padding-top:1.1rem;border-top:1px solid var(--line)}
+.summary b{font-size:1.4rem;color:var(--gold)}.summary small{color:var(--muted);display:block}
+
+/* snacks + pay */
+.snack{display:flex;align-items:center;gap:1rem;background:var(--card2);border-radius:12px;padding:.8rem 1rem;margin-bottom:.6rem}
+.snack>div:nth-child(2){flex:1}.snack small{color:var(--muted);display:block}
+.se{font-size:1.8rem}.qty{display:flex;align-items:center;gap:.6rem}
+.bill{background:var(--card2);border-radius:12px;padding:1rem;margin:1rem 0}
+.bill div{display:flex;justify-content:space-between;padding:.2rem 0;font-size:.92rem}
+.bill .tot{border-top:1px solid var(--line);margin-top:.4rem;padding-top:.5rem;font-weight:700;color:var(--gold);font-size:1.1rem}
+.bill .dis{color:#4fd28a}
+.coupon{display:flex;gap:.5rem;margin-bottom:.3rem}.coupon input{flex:1}
+.form{display:grid;gap:.8rem;grid-template-columns:1fr 1fr;margin-top:1rem}
+.form .full{grid-column:1/-1}
+.form label{font-size:.82rem;color:var(--muted);display:block;margin-bottom:.2rem}
+.form .field{width:100%}
+.field[aria-invalid=true]{border-color:var(--red)}
+.err{font-size:.78rem;color:#ff8394;min-height:1em}
+
+/* ticket */
+.ok{text-align:center;font-weight:700;font-size:1.3rem;margin-bottom:1rem}
+.ticket{position:relative;background:var(--card2);border:2px dashed var(--line);border-radius:16px;padding:1.3rem;margin:1rem 0}
+.t-top{display:flex;gap:1.2rem;flex-wrap:wrap}
+.t-p{width:90px;border-radius:8px;overflow:hidden;aspect-ratio:2/3;flex:none}.t-p .poster{height:100%}
+.ticket h3{font-size:1.25rem}.ticket p{color:var(--muted);font-size:.9rem}
+.barcode{background:#fff;color:#000;border-radius:10px;padding:.8rem;margin-top:1rem;text-align:center}
+.barcode svg{width:100%;max-width:340px;height:50px;fill:#000}
+.barcode .code{font:700 1.1rem monospace;letter-spacing:.25em;margin-top:.3rem}
+.stamp{position:absolute;inset:0;display:grid;place-items:center;font-size:2.4rem;font-weight:800;color:#ff3d57;transform:rotate(-12deg);background:#0006;border-radius:14px;letter-spacing:.1em}
+.tabs{display:flex;gap:.5rem;margin-top:1rem}
+.ytwrap{aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}.ytwrap iframe{width:100%;height:100%;border:0}
+
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translate(-50%,140px);background:#fff;color:#111;padding:.8rem 1.4rem;border-radius:10px;transition:transform .3s;z-index:300;font-weight:500;max-width:90%}
+.toast.show{transform:translate(-50%,0)}
+
+@media(max-width:900px){.offers,.f-grid{grid-template-columns:1fr 1fr}.menu{display:none}}
+@media(max-width:700px){
+ .burger{display:block}
+ .menu.open{display:flex;position:absolute;top:68px;left:0;right:0;background:var(--bg);flex-direction:column;gap:0;padding:.5rem 4%;border-bottom:1px solid var(--line);margin:0}
+ .menu.open a{padding:.8rem 0}
+ .offers,.f-grid,.form{grid-template-columns:1fr}
+ .bk{grid-template-columns:70px 1fr}.bk-side{grid-column:1/-1;grid-template-columns:1fr 1fr 1fr}
+ .seat{width:22px;height:22px}.seat.r{width:27px}
+ .tools .ib.hd{display:none}
+}
+@media print{body *{visibility:hidden}.printable,.printable *{visibility:visible}.printable{position:absolute;left:0;top:0;width:100%;background:#fff!important;color:#000!important}.printable p,.printable h3{color:#000!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.toast{transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="wrap nav">
+  <a href="#home" class="logo">Cine<b>Book</b></a>
+  <nav class="menu" id="menu" aria-label="Main">
+   <a href="#movies">Now Showing</a><a href="#soon">Coming Soon</a><a href="#watchlist">Watchlist</a><a href="#bookings">My Bookings</a><a href="#offers">Offers</a><a href="#faq">FAQ</a>
+  </nav>
+  <div class="tools">
+   <select class="sel" id="city" aria-label="City"></select>
+   <button class="ib hd" id="theme" aria-label="Switch theme">☀</button>
+   <a class="ib hd" href="#watchlist">♥<span class="cnt hide" id="wlCnt">0</span></a>
+   <span id="auth" class="row"></span>
+   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">☰</button>
+  </div>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="home"><div class="wrap"><div class="hero-in" id="heroIn"></div></div></section>
+
+<section id="movies">
+ <div class="wrap">
+  <div class="head"><h2>Now Showing</h2></div>
+  <form class="filters" id="qForm" role="search">
+   <input class="field" id="q" type="search" placeholder="Search movies" aria-label="Search movies">
+   <select class="sel" id="lang" aria-label="Language"></select>
+   <select class="sel" id="sort" aria-label="Sort by"><option value="pop">Most popular</option><option value="rate">Top rated</option><option value="az">A to Z</option><option value="new">Newest</option></select>
+  </form>
+  <div class="filters" id="chips"></div>
+  <div class="grid" id="grid"></div>
+ </div>
+</section>
+
+<section id="soon" style="padding-top:0"><div class="wrap"><div class="head"><h2>Coming Soon</h2></div><div class="grid" id="soonGrid"></div></div></section>
+<section id="watchlist" style="padding-top:0"><div class="wrap"><div class="head"><h2>My Watchlist</h2></div><div class="grid" id="wlGrid"></div></div></section>
+<section id="bookings" style="padding-top:0"><div class="wrap"><div class="head"><h2>My Bookings</h2></div><div class="bk-list" id="bkList"></div></div></section>
+
+<section id="offers" style="padding-top:0">
+ <div class="wrap">
+  <div class="head"><h2>Offers</h2></div>
+  <div class="offers">
+   <div class="offer"><b>CINE10</b><p>10% off on ticket price, on any show.</p><button class="btn ghost sm" data-act="copy" data-code="CINE10">Copy code</button></div>
+   <div class="offer"><b>STUDENT15</b><p>15% off tickets. Carry your student ID.</p><button class="btn ghost sm" data-act="copy" data-code="STUDENT15">Copy code</button></div>
+   <div class="offer"><b>FIRST20</b><p>20% off (up to ₹150) on your first booking.</p><button class="btn ghost sm" data-act="copy" data-code="FIRST20">Copy code</button></div>
+  </div>
+ </div>
+</section>
+
+<section id="faq" style="padding-top:0">
+ <div class="wrap">
+  <div class="head"><h2>Frequently asked questions</h2></div>
+  <details><summary>How do I book tickets?</summary><p>Pick a movie, choose a date, cinema and showtime, select seats, add snacks if you like, then pay. Your ticket appears under My Bookings.</p></details>
+  <details><summary>Can I cancel a booking?</summary><p>Yes. You can cancel up to 2 hours before the show. The ticket amount is refunded; the convenience fee is not.</p></details>
+  <details><summary>Where is my ticket?</summary><p>Log in and open My Bookings. Show the barcode at the cinema entrance, or print the ticket.</p></details>
+  <details><summary>Is my payment real?</summary><p>No. This is a demo checkout and no money is taken. Connect a payment provider before going live.</p></details>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap">
+  <div class="f-grid">
+   <div><div class="logo">Cine<b>Book</b></div><p style="margin-top:.5rem">Book movie tickets online for the best seats in town.</p></div>
+   <div><h4>Explore</h4><ul><li><a href="#movies">Now Showing</a></li><li><a href="#soon">Coming Soon</a></li><li><a href="#offers">Offers</a></li></ul></div>
+   <div><h4>Support</h4><ul><li><a href="#faq">FAQ</a></li><li>support@cinebook.example</li><li>+91 80 5550 0142</li></ul></div>
+   <div><h4>Get offers by email</h4><form class="news" id="newsForm" novalidate><input class="field" id="nem" type="email" placeholder="Your email" aria-label="Email"><button class="btn sm">Join</button></form><div class="err" id="nmsg" role="status"></div></div>
+  </div>
+  <div class="copy">© <span id="yr">2026</span> CineBook. This product uses the TMDB API but is not endorsed or certified by TMDB.</div>
+ </div>
+</footer>
+
+<!-- movie / booking modal -->
+<div class="overlay" id="mm" role="dialog" aria-modal="true" aria-labelledby="mTitle"><div class="modal"><button class="close" data-act="close" aria-label="Close">✕</button><div id="mBody"></div></div></div>
+
+<!-- login / signup -->
+<div class="overlay" id="am" role="dialog" aria-modal="true" aria-label="Log in or sign up">
+ <div class="modal sm"><button class="close" data-act="close" aria-label="Close">✕</button>
+  <div class="tabs"><button class="opt on" data-act="atab" data-t="login">Log in</button><button class="opt" data-act="atab" data-t="signup">Sign up</button></div>
+  <form class="form" id="loginForm" novalidate style="grid-template-columns:1fr">
+   <div><label for="le">Email</label><input class="field" id="le" type="email" autocomplete="email"></div>
+   <div><label for="lp">Password</label><input class="field" id="lp" type="password" autocomplete="current-password"></div>
+   <div class="err" id="e-login"></div><button class="btn">Log in</button>
+  </form>
+  <form class="form hide" id="signupForm" novalidate style="grid-template-columns:1fr">
+   <div><label for="sn">Full name</label><input class="field" id="sn" autocomplete="name"></div>
+   <div><label for="se">Email</label><input class="field" id="se" type="email" autocomplete="email"></div>
+   <div><label for="sp">Password (6+ characters)</label><input class="field" id="sp" type="password" autocomplete="new-password"></div>
+   <div class="err" id="e-signup"></div><button class="btn">Create account</button>
+  </form>
+  <p class="note">Demo accounts are saved only in this browser. Use a real backend for production login.</p>
+ </div>
+</div>
+
+<!-- trailer -->
+<div class="overlay" id="tm" role="dialog" aria-modal="true" aria-label="Trailer"><div class="modal"><button class="close" data-act="close" aria-label="Close">✕</button><div class="ytwrap" style="margin-top:2rem"><iframe id="tFrame" title="Trailer" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe></div></div></div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+/* ============ PASTE YOUR FREE TMDB API KEY HERE ============ */
+const KEY="PASTE_YOUR_TMDB_API_KEY_HERE";
+/* ============================================================ */
+const LIVE=!KEY.startsWith("PASTE");
+const API="https://api.themoviedb.org/3",IMG="https://image.tmdb.org/t/p/";
+const $=(s,c)=>(c||document).querySelector(s),$$=(s,c)=>[...(c||document).querySelectorAll(s)];
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const put=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){say("Browser storage is blocked. Data will not be saved.")}};
+const inr=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+const pad=n=>String(n).padStart(2,"0");
+const isoOf=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d};
+const fmtDate=i=>new Date(i+"T00:00:00").toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
+const fmtShort=i=>new Date(i+"T00:00:00").toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+const t12=t=>{const h=+t.slice(0,2);return((h+11)%12+1)+":"+t.slice(3)+" "+(h<12?"AM":"PM")};
+const showDT=(i,t)=>new Date(i+"T"+t+":00");
+let LN=null;try{LN=new Intl.DisplayNames(["en"],{type:"language"})}catch(e){}
+const langName=c=>{try{return LN?LN.of(c):c}catch(e){return c}};
+const toast=$("#toast");let tt;
+function say(m){toast.textContent=m;toast.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>toast.classList.remove("show"),2800)}
+
+/* ---------- data ---------- */
+const sample=(id,t,g,lang,r,rt,e,c,ov,date)=>({id,t,g,lang,r,rt,e,c,ov,date:date||isoOf(addDays(-20)),poster:"",back:""});
+const SAMPLE_NOW=[
+ sample("s1","Skyline Protocol",["Action","Thriller"],"en",8.1,125,"🚁","#ff3d57,#7b2ff7","A rogue pilot has one night to stop a hijacked satellite from striking a major city."),
+ sample("s2","Laugh Lines",["Comedy"],"en",7.4,102,"😂","#f7971e,#ffb300","Three rival stand-up comedians get stuck together on a cross-country tour bus."),
+ sample("s3","The Last Letter",["Drama"],"hi",8.6,138,"✉️","#134e5e,#71b280","A retired teacher finds a letter that takes her back to the town she left forty years ago."),
+ sample("s4","Orbit Zero",["Science Fiction"],"en",8.3,150,"🚀","#0f2027,#2c5364","A crew on a deep-space mission finds their ship is repeating the same 24 hours."),
+ sample("s5","Hollow House",["Horror"],"en",7.0,111,"👻","#232526,#7a1f1f","A family renovating an old home finds a room that is not on any floor plan."),
+ sample("s6","Iron Circuit",["Action"],"ta",7.7,132,"🏎️","#00c6ff,#0072ff","An underground racing champion is pulled into one last job across three countries.")
+];
+const SAMPLE_SOON=[
+ sample("s7","Monsoon Road",["Drama","Romance"],"hi",0,0,"🌧️","#355c7d,#c06c84","Two strangers share a long drive across Kerala during the first rains.",isoOf(addDays(12))),
+ sample("s8","Night Shift",["Thriller"],"en",0,0,"🌃","#141e30,#243b55","A hospital security guard notices the same visitor every night at 3 AM.",isoOf(addDays(25))),
+ sample("s9","Cricket Kings",["Comedy","Family"],"en",0,0,"🏏","#11998e,#38ef7d","A street team enters the city league with a retired coach and a borrowed bat.",isoOf(addDays(40)))
+];
+let now=[],soon=[],genres={},F={g:"All",l:"All",q:"",s:"pop"},S={},authCb=null,lastCode=null;
+const api=(p,q)=>fetch(API+p+"?api_key="+encodeURIComponent(KEY)+"&language=en-US"+(q||"")).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()});
+const norm=r=>({id:r.id,t:r.title,poster:r.poster_path?IMG+"w500"+r.poster_path:"",back:r.backdrop_path?IMG+"w1280"+r.backdrop_path:"",ov:r.overview,r:r.vote_average?+r.vote_average.toFixed(1):0,date:r.release_date||"",g:(r.genre_ids||[]).map(i=>genres[i]).filter(Boolean),lang:r.original_language,pop:r.popularity});
+const byId=id=>[...now,...soon,...store("cb_watch",[])].find(m=>String(m.id)===String(id));
+function loadDetails(m){
+ return api("/movie/"+m.id,"&append_to_response=videos,credits").then(d=>{
+  const v=((d.videos&&d.videos.results)||[]).find(x=>x.site==="YouTube"&&x.type==="Trailer");
+  m.det={runtime:d.runtime,tag:d.tagline,cast:((d.credits&&d.credits.cast)||[]).slice(0,6).map(c=>c.name),trailer:v?v.key:"",genres:(d.genres||[]).map(g=>g.name)};
+ }).catch(()=>{m.det={}});
+}
+function boot(){
+ const fallback=()=>{now=SAMPLE_NOW;soon=SAMPLE_SOON;init()};
+ if(!LIVE){fallback();return}
+ api("/genre/movie/list").then(g=>{g.genres.forEach(x=>genres[x.id]=x.name);return Promise.all([api("/movie/now_playing","&region=IN&page=1"),api("/movie/upcoming","&region=IN&page=1")])})
+ .then(([a,b])=>{now=a.results.map(norm);const td=isoOf(new Date());soon=b.results.map(norm).filter(m=>m.date>td&&!now.some(n=>n.id===m.id));if(!now.length)throw 0;init()})
+ .catch(()=>{say("Could not reach TMDB. Showing sample movies.");fallback()});
+}
+
+/* ---------- users ---------- */
+const hash=s=>{let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return String(4294967296*(2097151&h2)+(h1>>>0))};
+const user=()=>{const e=store("cb_session",null);return store("cb_users",[]).find(u=>u.email===e)||null};
+const myBookings=()=>{const u=user();return u?store("cb_bookings",[]).filter(b=>b.uid===u.email):[]};
+function updateAuth(){
+ const u=user();
+ $("#auth").innerHTML=u?`<a class="ib hd" href="#bookings">Hi, ${esc(u.name.split(" ")[0])}</a><button class="ib" data-act="logout">Log out</button>`:`<button class="btn sm" data-act="login">Log in</button>`;
+}
+function openAuth(tab,cb){authCb=cb||null;atab(tab||"login");openOv("#am");setTimeout(()=>$(tab==="signup"?"#sn":"#le").focus(),50)}
+function atab(t){$$("#am .tabs .opt").forEach(b=>b.classList.toggle("on",b.dataset.t===t));$("#loginForm").classList.toggle("hide",t!=="login");$("#signupForm").classList.toggle("hide",t!=="signup")}
+function afterAuth(){closeOv("#am");updateAuth();renderBookings();if(authCb){const f=authCb;authCb=null;f()}}
+function login(){
+ const e=$("#le").value.trim().toLowerCase(),p=$("#lp").value,u=store("cb_users",[]).find(x=>x.email===e&&x.h===hash(e+p));
+ $("#e-login").textContent=u?"":"Email or password is incorrect.";
+ if(u){put("cb_session",e);$("#loginForm").reset();afterAuth();say("Welcome back, "+u.name.split(" ")[0])}
+}
+function signup(){
+ const n=$("#sn").value.trim(),e=$("#se").value.trim().toLowerCase(),p=$("#sp").value,m=$("#e-signup"),us=store("cb_users",[]);
+ if(n.length<2)return m.textContent="Enter your full name.";
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e))return m.textContent="Enter a valid email.";
+ if(p.length<6)return m.textContent="Password needs 6 or more characters.";
+ if(us.some(x=>x.email===e))return m.textContent="This email already has an account. Log in instead.";
+ us.push({name:n,email:e,h:hash(e+p)});put("cb_users",us);put("cb_session",e);m.textContent="";$("#signupForm").reset();afterAuth();say("Account created. Welcome, "+n.split(" ")[0]);
+}
+
+/* ---------- movie lists ---------- */
+const wlList=()=>store("cb_watch",[]);
+const isWl=id=>wlList().some(m=>String(m.id)===String(id));
+function toggleWl(id){
+ const m=byId(id),l=wlList(),i=l.findIndex(x=>String(x.id)===String(id));
+ if(i>-1){l.splice(i,1);say("Removed from watchlist")}else if(m){const c=Object.assign({},m);delete c.det;l.push(c);say("Added to watchlist")}
+ put("cb_watch",l);renderLists();if(S.step===1&&$("#mm").classList.contains("open"))draw();
+}
+const poster=m=>m.poster?`<img src="${esc(m.poster)}" alt="${esc(m.t)} poster" loading="lazy">`:`<div class="ph" style="background:linear-gradient(135deg,${m.c||"#3b4075,#181b30"})"><div>${m.e||"🎬"}<small>${esc(m.t)}</small></div></div>`;
+const card=(m,up)=>`<article class="card"><div class="poster">${poster(m)}<span class="rate">★ ${m.r||"New"}</span><button class="wl${isWl(m.id)?" on":""}" data-act="wl" data-id="${esc(m.id)}" aria-label="Toggle watchlist for ${esc(m.t)}" aria-pressed="${isWl(m.id)}">♥</button></div><div class="info"><h3>${esc(m.t)}</h3><p>${esc((m.g||[]).slice(0,2).join(" · "))}${m.lang?" · "+esc(langName(m.lang)):""}</p><button class="btn block" data-act="${up?"info":"book"}" data-id="${esc(m.id)}">${up?"Details · "+(m.date?fmtShort(m.date):"TBA"):"Book tickets"}</button></div></article>`;
+function renderMovies(){
+ let l=now.filter(m=>(F.g==="All"||(m.g||[]).includes(F.g))&&(F.l==="All"||m.lang===F.l)&&m.t.toLowerCase().includes(F.q));
+ if(F.s==="rate")l.sort((a,b)=>b.r-a.r);else if(F.s==="az")l.sort((a,b)=>a.t.localeCompare(b.t));else if(F.s==="new")l.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+ $("#grid").innerHTML=l.length?l.map(m=>card(m,false)).join(""):'<p class="empty">No movies match your filters.</p>';
+}
+function renderLists(){
+ renderMovies();
+ $("#soonGrid").innerHTML=soon.length?soon.map(m=>card(m,true)).join(""):'<p class="empty">No upcoming releases listed right now.</p>';
+ const w=wlList();
+ $("#wlGrid").innerHTML=w.length?w.map(m=>card(m,!now.some(n=>String(n.id)===String(m.id)))).join(""):'<p class="empty">Tap the heart on any movie to save it here.</p>';
+ const c=$("#wlCnt");c.textContent=w.length;c.classList.toggle("hide",!w.length);
+}
+function buildFilters(){
+ const gs=[...new Set(now.flatMap(m=>m.g||[]))].sort(),ls=[...new Set(now.map(m=>m.lang).filter(Boolean))];
+ $("#chips").innerHTML=["All",...gs].map(g=>`<button class="chip${F.g===g?" on":""}" data-act="genre" data-g="${esc(g)}">${esc(g)}</button>`).join("");
+ $("#lang").innerHTML='<option value="All">All languages</option>'+ls.map(l=>`<option value="${esc(l)}">${esc(langName(l))}</option>`).join("");
+}
+function renderHero(){
+ const m=now[0];if(!m)return;
+ const h=$("#home");if(m.back)h.style.backgroundImage=`url("${m.back}")`;
+ $("#heroIn").innerHTML=`<small>NOW SHOWING</small><h1>${esc(m.t)}</h1><div class="meta">★ ${m.r||"New"} · ${esc((m.g||[]).slice(0,3).join(", "))}</div><p>${esc((m.ov||"").slice(0,190))}${(m.ov||"").length>190?"…":""}</p><div class="row"><button class="btn" data-act="book" data-id="${esc(m.id)}">Book tickets</button><button class="btn ghost" style="color:#fff;border-color:#fff8" data-act="trailer" data-id="${esc(m.id)}">▶ Watch trailer</button></div>`;
+}
+
+/* ---------- cinemas, seats, prices ---------- */
+const CITIES={Bengaluru:["Indiranagar","Koramangala","Whitefield"],Mumbai:["Andheri","Bandra","Powai"],Delhi:["Saket","Rajouri Garden","Dwarka"],Hyderabad:["Banjara Hills","Gachibowli","Kukatpally"],Chennai:["Anna Nagar","T. Nagar","OMR"]};
+const BASE=[["Galaxy Cinemas","Dolby Atmos",1,["10:30","13:45","16:30","19:15","22:00"]],["Starlight Multiplex","4K Laser",1.1,["11:00","14:15","17:00","20:00","22:45"]],["Royal Screens IMAX","IMAX · Recliners",1.35,["10:00","13:00","16:00","19:00","22:15"]]];
+const cinemasFor=c=>(CITIES[c]||CITIES.Bengaluru).map((a,i)=>({n:BASE[i][0]+" – "+a,f:BASE[i][1],m:BASE[i][2],t:BASE[i][3]}));
+const ROWS="ABCDEFGH".split(""),COLS=12;
+const tier=r=>"ABC".includes(r)?{n:"Standard",p:200,k:""}:"DEF".includes(r)?{n:"Premium",p:300,k:"p"}:{n:"Recliner",p:450,k:"r"};
+const seatPrice=id=>Math.round(tier(id[0]).p*S.cin.m);
+const SNACKS=[{n:"Salted Popcorn (Large)",p:250,e:"🍿"},{n:"Nachos with Cheese",p:220,e:"🧀"},{n:"Cold Drink (500 ml)",p:150,e:"🥤"},{n:"Combo: Popcorn + 2 Drinks",p:450,e:"🎁"}];
+const COUPONS={CINE10:{fn:t=>Math.round(t*.10),msg:"10% off applied"},STUDENT15:{fn:t=>Math.round(t*.15),msg:"15% student discount applied"},FIRST20:{fn:t=>Math.min(150,Math.round(t*.2)),first:true,msg:"20% off applied (max ₹150)"}};
+const showKey=()=>[S.m.id,S.city,S.cin.n,S.dateISO,S.time].join("|");
+function takenFor(){
+ const k=showKey();let seed=0,t=[];
+ for(let i=0;i<k.length;i++)seed=(seed*31+k.charCodeAt(i))%9973;
+ ROWS.forEach(r=>{for(let c=1;c<=COLS;c++){seed=(seed*1103+12345)%9973;if(seed%100<22)t.push(r+c)}});
+ store("cb_bookings",[]).forEach(b=>{if(b.key===k&&b.status==="active")t=t.concat(b.seats)});
+ return t;
+}
+function bill(){
+ const t=S.seats.reduce((s,id)=>s+seatPrice(id),0),sn=Object.keys(S.snacks).reduce((s,k)=>s+SNACKS[k].p*S.snacks[k],0),fee=S.seats.length*25,disc=S.coupon?S.coupon.fn(t):0;
+ return{t,sn,fee,disc,total:t+sn+fee-disc};
+}
+const billHTML=b=>`<div><span>Tickets (${S.seats.length}) · ${esc(S.seats.slice().sort().join(", "))}</span><span>${inr(b.t)}</span></div>${b.sn?`<div><span>Snacks</span><span>${inr(b.sn)}</span></div>`:""}<div><span>Convenience fee</span><span>${inr(b.fee)}</span></div>${b.disc?`<div class="dis"><span>Coupon ${esc(S.coupon.code)}</span><span>−${inr(b.disc)}</span></div>`:""}<div class="tot"><span>Total</span><span>${inr(b.total)}</span></div>`;
+
+/* ---------- booking modal ---------- */
+function openOv(s){$(s).classList.add("open");lock()}
+function closeOv(s){$(s).classList.remove("open");if(s==="#tm")$("#tFrame").src="";lock()}
+function lock(){document.body.style.overflow=$(".overlay.open")?"hidden":""}
+function days(){return[0,1,2,3,4].map(i=>{const d=addDays(i);return{iso:isoOf(d)}})}
+function openMovie(id){
+ const m=byId(id);if(!m)return;
+ const up=soon.some(x=>String(x.id)===String(m.id))&&!now.some(x=>String(x.id)===String(m.id));
+ S={m,city:store("cb_city","Bengaluru"),dateISO:isoOf(new Date()),seats:[],snacks:{},coupon:null,step:1,method:"card",upcoming:up};
+ openOv("#mm");draw();
+ if(LIVE&&!m.det)loadDetails(m).then(()=>{if(S.m===m&&S.step===1)draw()});
+}
+const stepper=()=>`<ol class="steps">${["Showtime","Seats","Snacks","Pay","Ticket"].map((n,i)=>`<li class="${i+1===S.step?"on":i+1<S.step?"done":""}">${i+1}. ${n}</li>`).join("")}</ol>`;
+function draw(){
+ const f=[null,s1,s2,s3,s4,s5,s6][S.step];
+ $("#mBody").innerHTML=(S.step>=1&&S.step<=5&&!S.upcoming?stepper():"")+f();
+ $("#mm").scrollTop=0;
+ if(S.step===2)seatBar();if(S.step===3)snackBar();
+}
+const rateHTML=id=>{const r=store("cb_ratings",{})[id]||0;return`<small style="color:var(--muted)">Your rating: </small>`+[1,2,3,4,5].map(n=>`<button class="${n<=r?"on":""}" data-act="rate" data-n="${n}" aria-label="Rate ${n} of 5">★</button>`).join("")};
+function s1(){
+ const m=S.m,d=m.det||{},rt=d.runtime||m.rt,g=(d.genres&&d.genres.length?d.genres:m.g||[]).slice(0,3).join(", ");
+ let h=`<div class="m-head"><div class="m-poster"><div class="poster">${poster(m)}</div></div><div class="m-info"><h2 id="mTitle">${esc(m.t)}</h2>
+ <div class="meta">${m.r?"★ "+m.r:"Not yet rated"}${rt?` · ${Math.floor(rt/60)}h ${rt%60}m`:""}${g?" · "+esc(g):""}${m.lang?" · "+esc(langName(m.lang)):""}</div>
+ ${d.tag?`<em class="tag">${esc(d.tag)}</em>`:""}<p>${esc(m.ov||"No description available.")}</p>
+ ${d.cast&&d.cast.length?`<p><b>Cast:</b> ${esc(d.cast.join(", "))}</p>`:""}
+ <div class="row"><button class="btn ghost sm" data-act="trailer" data-id="${esc(m.id)}">▶ Trailer</button><button class="btn ghost sm" data-act="wl" data-id="${esc(m.id)}">${isWl(m.id)?"♥ In watchlist":"♡ Add to watchlist"}</button></div>
+ <div class="stars" aria-label="Rate this movie">${rateHTML(m.id)}</div></div></div>`;
+ if(S.upcoming)return h+`<p class="note">Releases ${m.date?fmtDate(m.date):"soon"}. Booking opens closer to the release date. Add it to your watchlist so you do not miss it.</p>`;
+ h+=`<div class="label">Choose a date</div><div class="row">${days().map(d=>`<button class="opt${d.iso===S.dateISO?" on":""}" data-act="date" data-d="${d.iso}">${fmtDate(d.iso)}</button>`).join("")}</div><div class="label">Cinemas in ${esc(S.city)}</div>`;
+ return h+cinemasFor(S.city).map((c,ci)=>`<div class="cin"><div class="cin-h"><b>${esc(c.n)}</b><small>${esc(c.f)} · from ${inr(200*c.m)}</small></div><div class="row">${c.t.map(t=>`<button class="opt" data-act="show" data-ci="${ci}" data-t="${t}"${showDT(S.dateISO,t)<=new Date()?" disabled":""}>${t12(t)}</button>`).join("")}</div></div>`).join("");
+}
+function s2(){
+ const taken=takenFor();
+ let h=`<h2>Select your seats</h2><p class="meta">${esc(S.m.t)} · ${esc(S.cin.n)} · ${fmtDate(S.dateISO)} · ${t12(S.time)}</p><div class="screen"></div><div class="screen-l">SCREEN THIS WAY</div><div class="seats">`,last="";
+ ROWS.forEach(r=>{const t=tier(r);if(t.n!==last){h+=`<div class="tier">${t.n} · ${inr(Math.round(t.p*S.cin.m))}</div>`;last=t.n}
+  h+=`<div class="srow"><i>${r}</i>`;
+  for(let c=1;c<=COLS;c++){const id=r+c;h+=`<button class="seat ${t.k}${S.seats.includes(id)?" sel":""}" data-act="seat" data-id="${id}" aria-label="Seat ${id}, ${t.n}"${taken.includes(id)?" disabled":""}></button>`;if(c===6)h+='<span class="gap"></span>'}
+  h+="</div>"});
+ return h+`</div><div class="legend"><span style="--c:#4a5090">Standard</span><span style="--c:#7a6a2a">Premium</span><span style="--c:#2f7a6a">Recliner</span><span style="--c:var(--red)">Selected</span><span style="--c:#14162b">Taken</span></div>
+ <div class="summary"><div><small id="sSeats"></small><b id="sTot"></b></div><div class="row"><button class="btn ghost" data-act="back">Back</button><button class="btn" id="sNext" data-act="toSnacks" disabled>Continue</button></div></div>`;
+}
+function seatBar(){const n=S.seats.length;$("#sSeats").textContent=n?`${n} seat${n>1?"s":""}: ${S.seats.slice().sort().join(", ")}`:"No seats selected (max 8)";$("#sTot").textContent=inr(bill().t);$("#sNext").disabled=!n}
+function s3(){
+ return`<h2>Add snacks</h2><p class="meta">Optional. Skip this step if you only want tickets.</p><div style="margin-top:1rem">${SNACKS.map((s,i)=>`<div class="snack"><span class="se">${s.e}</span><div><b>${esc(s.n)}</b><small>${inr(s.p)}</small></div><div class="qty"><button class="opt" data-act="snack" data-i="${i}" data-d="-1" aria-label="Remove one ${esc(s.n)}">−</button><b id="q${i}">${S.snacks[i]||0}</b><button class="opt" data-act="snack" data-i="${i}" data-d="1" aria-label="Add one ${esc(s.n)}">+</button></div></div>`).join("")}</div>
+ <div class="summary"><div><small>Tickets + snacks</small><b id="sTot"></b></div><div class="row"><button class="btn ghost" data-act="back">Back</button><button class="btn" data-act="toPay">Continue to payment</button></div></div>`;
+}
+function snackBar(){const b=bill();$("#sTot").textContent=inr(b.t+b.sn)}
+function payFields(){
+ const f=(id,l,ph,extra)=>`<div><label for="${id}">${l}</label><input class="field" id="${id}" placeholder="${ph}" ${extra||""}><div class="err" id="e-${id}"></div></div>`;
+ if(S.method==="upi")return f("upi","UPI ID","name@bank",'class="full" autocomplete="off"').replace('<div>','<div class="full">');
+ if(S.method==="wallet")return`<div class="full"><label for="wal">Choose wallet</label><select class="sel field" id="wal"><option>Paytm</option><option>PhonePe</option><option>Amazon Pay</option></select></div>`;
+ return f("cname","Name on card","As printed on card",'autocomplete="cc-name"')+f("cn","Card number","4242 4242 4242 4242",'inputmode="numeric" maxlength="19" autocomplete="cc-number"')+f("ex","Expiry (MM/YY)","08/29",'maxlength="5" autocomplete="cc-exp"')+f("cvv","CVV","123",'inputmode="numeric" maxlength="3" type="password" autocomplete="cc-csc"');
+}
+function s4(){
+ const b=bill();
+ return`<h2>Review and pay</h2><p class="meta">${esc(S.m.t)} · ${esc(S.cin.n)} · ${fmtDate(S.dateISO)} · ${t12(S.time)}</p>
+ <div class="bill" id="bill">${billHTML(b)}</div>
+ <div class="coupon"><input class="field" id="cpn" placeholder="Coupon code" value="${S.coupon?esc(S.coupon.code):""}" aria-label="Coupon code"><button class="btn ghost sm" data-act="coupon">Apply</button></div><div class="err" id="cpnMsg" role="status"></div>
+ <div class="tabs">${[["card","Card"],["upi","UPI"],["wallet","Wallet"]].map(([k,n])=>`<button class="opt${S.method===k?" on":""}" data-act="method" data-k="${k}">${n}</button>`).join("")}</div>
+ <form id="payForm" class="form" novalidate>${payFields()}<div class="full row"><button type="button" class="btn ghost" data-act="back">Back</button><button class="btn" id="payBtn">Pay ${inr(b.total)}</button></div></form>
+ <p class="note">Demo checkout. No real payment is taken.</p>`;
+}
+const barcode=code=>{let x=0,s="";for(let i=0;i<code.length;i++){const n=code.charCodeAt(i);for(let b=0;b<7;b++){const w=((n>>b)&1)+1;s+=`<rect x="${x}" y="0" width="${w}" height="50"/>`;x+=w+2}}return`<svg viewBox="0 0 ${x} 50" preserveAspectRatio="none" role="img" aria-label="Ticket barcode">${s}</svg>`};
+function ticketHTML(b){
+ const p=b.poster?`<div class="poster"><img src="${esc(b.poster)}" alt=""></div>`:`<div class="poster"><div class="ph" style="background:linear-gradient(135deg,${b.c})">${b.e}</div></div>`;
+ return`<div class="ticket printable"><div class="t-top"><div class="t-p">${p}</div><div><h3>${esc(b.t)}</h3><p>${esc(b.cinema)}, ${esc(b.city)}</p><p>${fmtDate(b.date)} · ${t12(b.time)}</p><p><b>Seats:</b> ${esc(b.seats.join(", "))}</p>${b.snacks.length?`<p><b>Snacks:</b> ${esc(b.snacks.map(s=>s.q+"× "+s.n).join(", "))}</p>`:""}<p><b>Paid:</b> ${inr(b.total)} (${esc(b.method)})</p></div></div><div class="barcode">${barcode(b.code)}<div class="code">${esc(b.code)}</div></div>${b.status==="cancelled"?'<div class="stamp">CANCELLED</div>':""}</div>`;
+}
+const s5=()=>`<div class="ok">✅ Booking confirmed</div>${ticketHTML(S.last)}<p class="note">Show this barcode at the cinema entrance. You can find it anytime under My Bookings.</p><div class="row" style="margin-top:1rem"><button class="btn" data-act="print">Print ticket</button><button class="btn ghost" data-act="toBookings">View my bookings</button></div>`;
+const s6=()=>ticketHTML(S.b)+`<div class="row" style="margin-top:1rem"><button class="btn" data-act="print">Print ticket</button><button class="btn ghost" data-act="close">Close</button></div>`;
+
+/* ---------- my bookings ---------- */
+function renderBookings(){
+ const u=user(),box=$("#bkList");
+ if(!u){box.innerHTML='<p class="empty">Log in to see your bookings.<br><br><button class="btn sm" data-act="login">Log in</button></p>';return}
+ const l=myBookings().sort((a,b)=>b.at-a.at);
+ box.innerHTML=l.length?l.map(b=>{
+  const dt=showDT(b.date,b.time),up=dt>new Date(),can=b.status==="active"&&dt-new Date()>2*3600e3;
+  const st=b.status==="cancelled"?'<span class="badge cx">Cancelled</span>':up?'<span class="badge up">Upcoming</span>':'<span class="badge">Watched</span>';
+  const th=b.poster?`<div class="poster"><img src="${esc(b.poster)}" alt=""></div>`:`<div class="poster"><div class="ph" style="background:linear-gradient(135deg,${b.c});font-size:2.4rem">${b.e}</div></div>`;
+  return`<article class="bk${b.code===lastCode?" new":""}" id="bk-${esc(b.code)}">${th}<div><h3>${esc(b.t)}${st}</h3><p>${esc(b.cinema)}, ${esc(b.city)}</p><p>${fmtDate(b.date)} · ${t12(b.time)} · Seats ${esc(b.seats.join(", "))}</p><div class="code">${esc(b.code)}</div></div><div class="bk-side"><b style="color:var(--gold)">${inr(b.total)}</b><button class="btn ghost sm" data-act="view" data-code="${esc(b.code)}">View ticket</button>${b.status==="active"?`<button class="btn ghost sm" data-act="cancel" data-code="${esc(b.code)}"${can?"":" disabled title='Cancellation closes 2 hours before the show'"}>Cancel</button>`:""}</div></article>`;
+ }).join(""):'<p class="empty">You have no bookings yet. Pick a movie above to book your first ticket.</p>';
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click",e=>{
+ if(e.target.classList.contains("overlay")){closeOv("#"+e.target.id);return}
+ const el=e.target.closest("[data-act]");if(!el)return;
+ const a=el.dataset.act,d=el.dataset;
+ switch(a){
+  case"close":closeOv("#"+el.closest(".overlay").id);break;
+  case"book":case"info":openMovie(d.id);break;
+  case"wl":toggleWl(d.id);break;
+  case"genre":F.g=d.g;$$(".chip").forEach(c=>c.classList.toggle("on",c===el));renderMovies();break;
+  case"trailer":{const m=byId(d.id);if(!LIVE)return say("Add your TMDB key to watch trailers.");
+   const go=()=>m.det&&m.det.trailer?(($("#tFrame").src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(m.det.trailer)+"?autoplay=1"),openOv("#tm")):say("No trailer available for this movie.");
+   m.det?go():loadDetails(m).then(go);break}
+  case"date":S.dateISO=d.d;draw();break;
+  case"show":S.cin=cinemasFor(S.city)[+d.ci];S.time=d.t;S.seats=[];S.step=2;draw();break;
+  case"seat":{const i=S.seats.indexOf(d.id);if(i>-1){S.seats.splice(i,1);el.classList.remove("sel")}else{if(S.seats.length>=8)return say("You can book up to 8 seats at once.");S.seats.push(d.id);el.classList.add("sel")}seatBar();break}
+  case"back":S.step=Math.max(1,S.step-1);draw();break;
+  case"toSnacks":S.step=3;draw();break;
+  case"snack":{const i=+d.i,q=Math.max(0,Math.min(10,(S.snacks[i]||0)+ +d.d));S.snacks[i]=q;$("#q"+i).textContent=q;snackBar();break}
+  case"toPay":if(!user()){openAuth("login",()=>{S.step=4;draw()});say("Log in to complete your booking.");return}S.step=4;draw();break;
+  case"method":S.method=d.k;draw();break;
+  case"coupon":{const code=$("#cpn").value.trim().toUpperCase(),c=COUPONS[code],m=$("#cpnMsg");
+   if(!c){m.textContent="This coupon code is not valid.";return}
+   if(c.first&&myBookings().length){m.textContent="FIRST20 is only for your first booking.";return}
+   S.coupon={code,fn:c.fn};m.style.color="#4fd28a";m.textContent=c.msg;const b=bill();$("#bill").innerHTML=billHTML(b);$("#payBtn").textContent="Pay "+inr(b.total);break}
+  case"rate":{const r=store("cb_ratings",{});r[S.m.id]=+d.n;put("cb_ratings",r);draw();say("Thanks for rating "+S.m.t);break}
+  case"view":S={step:6,b:store("cb_bookings",[]).find(b=>b.code===d.code)};openOv("#mm");draw();break;
+  case"print":window.print();break;
+  case"toBookings":closeOv("#mm");{const el2=document.getElementById("bk-"+lastCode)||$("#bookings");el2.scrollIntoView({behavior:"smooth",block:"center"})}break;
+  case"cancel":{if(!confirm("Cancel this booking? The seats will be released."))return;
+   const all=store("cb_bookings",[]),b=all.find(x=>x.code===d.code);if(!b)return;b.status="cancelled";put("cb_bookings",all);renderBookings();say("Cancelled. "+inr(b.total-b.fee)+" will be refunded to your original payment method.");break}
+  case"login":openAuth("login");break;
+  case"logout":put("cb_session",null);updateAuth();renderBookings();say("You have been logged out.");break;
+  case"atab":atab(d.t);break;
+  case"copy":navigator.clipboard&&navigator.clipboard.writeText(d.code).then(()=>say("Copied "+d.code),()=>say("Code: "+d.code));break;
+ }
+});
+const chk=(id,msg,fn)=>{const f=$("#"+id),ok=fn(f.value.trim());$("#e-"+id).textContent=ok?"":msg;f.setAttribute("aria-invalid",!ok);return ok};
+function pay(){
+ let ok;
+ if(S.method==="card")ok=[chk("cname","Enter the name on the card.",v=>v.length>1),chk("cn","Enter a 16-digit card number.",v=>v.replace(/\s/g,"").length===16),chk("ex","Use MM/YY format.",v=>{const m=/^(\d\d)\/(\d\d)$/.exec(v);return m&&+m[1]>=1&&+m[1]<=12}),chk("cvv","Enter the 3-digit CVV.",v=>/^\d{3}$/.test(v))].every(Boolean);
+ else if(S.method==="upi")ok=chk("upi","Enter a valid UPI ID, for example name@bank.",v=>/^[\w.\-]{2,}@[\w]{2,}$/.test(v));
+ else ok=true;
+ if(!ok)return;
+ if(S.seats.some(id=>takenFor().includes(id))){say("Some seats were just booked by someone else. Please pick again.");S.seats=[];S.step=2;draw();return}
+ const btn=$("#payBtn");btn.disabled=true;btn.textContent="Processing…";
+ setTimeout(()=>{
+  const u=user(),b=bill(),rec={code:"CB"+Math.random().toString(36).slice(2,8).toUpperCase(),uid:u.email,mid:S.m.id,t:S.m.t,poster:S.m.poster||"",e:S.m.e||"🎬",c:S.m.c||"#3b4075,#181b30",city:S.city,cinema:S.cin.n,date:S.dateISO,time:S.time,seats:S.seats.slice().sort(),snacks:Object.keys(S.snacks).filter(k=>S.snacks[k]>0).map(k=>({n:SNACKS[k].n,q:S.snacks[k]})),fee:b.fee,total:b.total,method:S.method.toUpperCase(),status:"active",at:Date.now(),key:showKey()};
+  const all=store("cb_bookings",[]);all.push(rec);put("cb_bookings",all);
+  lastCode=rec.code;S.last=rec;S.step=5;draw();renderBookings();
+ },900);
+}
+document.addEventListener("submit",e=>{
+ e.preventDefault();const id=e.target.id;
+ if(id==="payForm")pay();else if(id==="loginForm")login();else if(id==="signupForm")signup();
+ else if(id==="qForm")location.hash="#movies";
+ else if(id==="newsForm"){const v=$("#nem").value.trim(),m=$("#nmsg");if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){m.style.color="#4fd28a";m.textContent="Thanks for subscribing!";e.target.reset()}else{m.style.color="#ff8394";m.textContent="Enter a valid email address."}}
+});
+document.addEventListener("input",e=>{
+ const t=e.target;
+ if(t.id==="q"){F.q=t.value.trim().toLowerCase();renderMovies()}
+ else if(t.id==="cn")t.value=t.value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim();
+ else if(t.id==="ex"){const v=t.value.replace(/\D/g,"").slice(0,4);t.value=v.length>2?v.slice(0,2)+"/"+v.slice(2):v}
+ else if(t.id==="cvv")t.value=t.value.replace(/\D/g,"").slice(0,3);
+});
+document.addEventListener("change",e=>{
+ const t=e.target;
+ if(t.id==="lang"){F.l=t.value;renderMovies()}
+ else if(t.id==="sort"){F.s=t.value;renderMovies()}
+ else if(t.id==="city"){put("cb_city",t.value);if(S.m&&S.step===1&&$("#mm").classList.contains("open")){S.city=t.value;draw()}say("City set to "+t.value)}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){const o=$$(".overlay.open").pop();if(o)closeOv("#"+o.id)}});
+
+/* theme, menu, init */
+function setTheme(t){document.documentElement.dataset.theme=t;$("#theme").textContent=t==="dark"?"☀":"🌙";put("cb_theme",t)}
+$("#theme").onclick=()=>setTheme(document.documentElement.dataset.theme==="dark"?"light":"dark");
+const burger=$("#burger"),menu=$("#menu");
+burger.onclick=()=>{const o=menu.classList.toggle("open");burger.setAttribute("aria-expanded",o)};
+menu.onclick=e=>{if(e.target.closest("a"))menu.classList.remove("open")};
+function init(){
+ $("#city").innerHTML=Object.keys(CITIES).map(c=>`<option>${c}</option>`).join("");$("#city").value=store("cb_city","Bengaluru");
+ buildFilters();renderHero();renderLists();renderBookings();updateAuth();
+}
+setTheme(store("cb_theme","dark"));
+$("#yr").textContent=new Date().getFullYear();
+boot();
+})();
+</script>
+</body>
+</html>

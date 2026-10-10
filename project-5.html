@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CineBook | Book Movie Tickets Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1020;--card:#181b30;--card2:#20244a;--red:#ff3d57;--gold:#ffc542;--text:#f2f3fa;--muted:#9a9eb8;--line:#2c3058;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:Poppins,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.wrap{width:min(1180px,92%);margin-inline:auto}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn{background:var(--red);color:#fff;border:0;border-radius:10px;padding:.75em 1.6em;font-weight:600;font-size:.95rem;transition:filter .2s}
+.btn:hover{filter:brightness(1.12)}
+.btn:disabled{background:#3a3e66;color:#8a8eb0;cursor:not-allowed}
+.btn.ghost{background:none;border:1.5px solid var(--line);color:var(--text)}
+.btn.sm{padding:.45em 1.1em;font-size:.85rem}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(14,16,32,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:1rem}
+.logo{font-weight:800;font-size:1.5rem}.logo b{color:var(--red)}
+.menu{display:flex;gap:1.8rem;font-size:.95rem;color:var(--muted);align-items:center}
+.menu a:hover{color:#fff}
+.menu .mb{color:#fff;background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:.3em 1em}
+.count{background:var(--red);color:#fff;border-radius:99px;font-size:.72rem;font-weight:700;padding:.05em .55em;margin-left:.3rem}
+.burger{display:none;background:none;border:0;color:#fff;font-size:1.6rem}
+
+/* hero */
+.hero{padding:4rem 0 3rem;background:radial-gradient(circle at 80% 20%,#3a1c4a 0,transparent 55%),var(--bg)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center}
+h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.08;font-weight:800;letter-spacing:-.02em}
+h1 span{color:var(--red)}
+.hero p{color:var(--muted);margin:1rem 0 1.6rem;max-width:46ch}
+.search{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.35rem;max-width:460px}
+.search input{flex:1;background:none;border:0;outline:0;color:#fff;padding:.6rem 1rem;font:inherit;min-width:0}
+.hero-card{background:linear-gradient(135deg,#ff3d57,#7b2ff7);border-radius:22px;aspect-ratio:4/3;display:grid;place-items:center;font-size:7rem;box-shadow:0 25px 60px rgba(123,47,247,.35);position:relative}
+.hero-card small{position:absolute;left:1.2rem;bottom:1rem;font-size:.9rem;font-weight:600;background:#0006;padding:.3em .9em;border-radius:99px}
+
+/* sections */
+section{padding:3rem 0}
+.head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.4rem}
+h2{font-size:1.7rem;font-weight:700}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap}
+.chip{background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:.4em 1.1em;font-size:.88rem}
+.chip.on,.chip:hover{background:var(--red);border-color:var(--red);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.4rem}
+.movie{background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);text-align:left;color:inherit;transition:transform .2s}
+.movie:hover{transform:translateY(-5px)}
+.poster{height:250px;display:grid;place-items:center;font-size:5.5rem;position:relative}
+.rating{position:absolute;top:10px;right:10px;background:#000a;color:var(--gold);font-weight:600;font-size:.82rem;padding:.2em .7em;border-radius:99px}
+.info{padding:1rem}
+.info h3{font-size:1.02rem}
+.info p{color:var(--muted);font-size:.84rem;margin:.2rem 0 .8rem}
+.empty{color:var(--muted);padding:1.5rem;background:var(--card);border:1px dashed var(--line);border-radius:var(--r);text-align:center}
+
+/* my bookings */
+.bk-list{display:grid;gap:1rem}
+.bk{display:grid;grid-template-columns:90px 1fr auto;gap:1.2rem;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.2rem}
+.bk-p{height:100px;border-radius:10px;display:grid;place-items:center;font-size:2.6rem}
+.bk h3{font-size:1.1rem}
+.bk p{color:var(--muted);font-size:.88rem}
+.bk .code{font:700 1.05rem monospace;letter-spacing:.15em;color:var(--gold);margin-top:.3rem}
+.bk-side{text-align:right}
+.bk-side b{display:block;font-size:1.2rem;color:var(--gold);margin-bottom:.5rem}
+.new{outline:2px solid var(--gold)}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(5,6,16,.8);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:2rem 1rem;z-index:100}
+.overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:20px;width:min(860px,100%);padding:1.8rem;position:relative}
+.close{position:absolute;top:1rem;right:1rem;background:var(--card2);border:0;color:#fff;width:34px;height:34px;border-radius:50%;font-size:1.1rem}
+.m-head{display:flex;gap:1.4rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.m-poster{width:120px;height:170px;border-radius:12px;display:grid;place-items:center;font-size:3.6rem;flex:none}
+.m-head h2{font-size:1.6rem}
+.m-head p{color:var(--muted);font-size:.92rem;max-width:52ch;margin-top:.4rem}
+.label{font-weight:600;margin:1.3rem 0 .6rem;font-size:.95rem}
+.row{display:flex;gap:.6rem;flex-wrap:wrap}
+.opt{background:var(--card2);border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:.5em 1.1em;font-size:.9rem;text-align:center}
+.opt small{display:block;color:var(--muted);font-size:.72rem}
+.opt.on{border-color:var(--red);background:#ff3d5722}
+.screen{height:6px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:50%;margin:1.2rem auto .4rem;width:70%}
+.screen-l{text-align:center;font-size:.75rem;color:var(--muted);margin-bottom:1rem}
+.seats{display:grid;gap:.45rem;justify-content:center;overflow-x:auto;padding-bottom:.5rem}
+.srow{display:flex;gap:.4rem;align-items:center;justify-content:center}
+.srow i{width:18px;font-style:normal;font-size:.75rem;color:var(--muted)}
+.seat{width:28px;height:26px;border-radius:7px 7px 3px 3px;border:0;background:#3b4075;flex:none}
+.seat:hover:not(:disabled){background:#5a60a8}
+.seat.sel{background:var(--red)}
+.seat.vip{background:#6a5a20}
+.seat.vip.sel{background:var(--red)}
+.seat:disabled{background:#14162b;cursor:not-allowed}
+.gap{width:16px;flex:none}
+.legend{display:flex;gap:1.2rem;justify-content:center;font-size:.78rem;color:var(--muted);margin-top:1rem;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:.4rem;vertical-align:-1px;background:var(--c)}
+.summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.summary b{font-size:1.4rem;color:var(--gold)}
+.summary small{color:var(--muted);display:block}
+
+/* checkout + ticket */
+.form{display:grid;gap:.9rem;grid-template-columns:1fr 1fr;margin-top:1rem}
+.form label{font-size:.85rem;color:var(--muted);display:block;margin-bottom:.25rem}
+.form input{width:100%;background:var(--card2);border:1.5px solid var(--line);color:#fff;border-radius:10px;padding:.7em .9em;font:inherit}
+.form input[aria-invalid="true"]{border-color:var(--red)}
+.err{font-size:.78rem;color:#ff8394;min-height:1em}
+.ticket{background:var(--card2);border:2px dashed var(--line);border-radius:16px;padding:1.5rem;text-align:center}
+.ticket .code{font:700 1.6rem monospace;letter-spacing:.2em;color:var(--gold);margin:.6rem 0}
+.ticket p{color:var(--muted);font-size:.92rem}
+.ticket .acts{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+.hide{display:none}
+
+/* offers + footer */
+.offers{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.offer{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.4rem}
+.offer b{color:var(--gold);font-size:1.3rem;display:block}
+.offer p{color:var(--muted);font-size:.9rem}
+footer{border-top:1px solid var(--line);padding:2.5rem 0 1.5rem;margin-top:2rem;color:var(--muted);font-size:.9rem}
+.f-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:2rem}
+footer h4{color:#fff;margin-bottom:.6rem}
+footer li{list-style:none;margin:.35rem 0}
+footer li a:hover{color:#fff}
+.copy{text-align:center;margin-top:2rem}
+
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translate(-50%,120px);background:#fff;color:#111;padding:.8rem 1.4rem;border-radius:10px;transition:transform .3s;z-index:200;font-weight:500}
+.toast.show{transform:translate(-50%,0)}
+
+@media(max-width:900px){
+ .hero-grid{grid-template-columns:1fr}.hero-card{display:none}
+ .offers{grid-template-columns:1fr}.f-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+ .burger{display:block}
+ .menu{position:absolute;top:68px;left:0;right:0;background:var(--bg);flex-direction:column;align-items:flex-start;gap:0;padding:.5rem 4%;border-bottom:1px solid var(--line);display:none}
+ .menu.open{display:flex}.menu a{padding:.8rem 0}
+ .form{grid-template-columns:1fr}
+ .seat{width:22px;height:22px}
+ .bk{grid-template-columns:70px 1fr}
+ .bk-side{grid-column:1/-1;text-align:left;display:flex;justify-content:space-between;align-items:center}
+ .bk-side b{margin:0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.movie,.toast{transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="wrap nav">
+  <a href="#home" class="logo">Cine<b>Book</b></a>
+  <nav class="menu" id="menu" aria-label="Main">
+   <a href="#home">Home</a>
+   <a href="#movies">Now Showing</a>
+   <a href="#offers">Offers</a>
+   <a href="#bookings" class="mb">My Bookings<span class="count hide" id="navCount">0</span></a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">☰</button>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="home">
+ <div class="wrap hero-grid">
+  <div>
+   <h1>Your seat is waiting.<br><span>Book in 30 seconds.</span></h1>
+   <p>Pick a movie, choose a showtime and select your exact seats. No queues, no paper tickets.</p>
+   <form class="search" id="searchForm">
+    <input id="q" type="search" placeholder="Search movies" aria-label="Search movies">
+    <button class="btn" type="submit">Search</button>
+   </form>
+  </div>
+  <div class="hero-card" aria-hidden="true">🎬<small>Now showing in 4 screens</small></div>
+ </div>
+</section>
+
+<section id="movies">
+ <div class="wrap">
+  <div class="head">
+   <h2>Now Showing</h2>
+   <div class="chips" id="chips">
+    <button class="chip on" data-g="All">All</button><button class="chip" data-g="Action">Action</button><button class="chip" data-g="Comedy">Comedy</button><button class="chip" data-g="Drama">Drama</button><button class="chip" data-g="Sci-Fi">Sci-Fi</button><button class="chip" data-g="Horror">Horror</button>
+   </div>
+  </div>
+  <div class="grid" id="grid"></div>
+ </div>
+</section>
+
+<section id="bookings" style="padding-top:0">
+ <div class="wrap">
+  <div class="head"><h2>My Bookings</h2></div>
+  <div class="bk-list" id="bkList"></div>
+ </div>
+</section>
+
+<section id="offers" style="padding-top:0">
+ <div class="wrap">
+  <div class="head"><h2>Offers</h2></div>
+  <div class="offers">
+   <div class="offer"><b>Tuesday Deal</b><p>Every ticket is $2 off on Tuesdays, all day.</p></div>
+   <div class="offer"><b>Student Pass</b><p>Show your student ID and save 15% on any show.</p></div>
+   <div class="offer"><b>Group of 5+</b><p>Book five or more seats and get the popcorn free.</p></div>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer id="contact">
+ <div class="wrap">
+  <div class="f-grid">
+   <div><div class="logo">Cine<b>Book</b></div><p style="margin-top:.5rem">Book movie tickets online for the best seats in town.</p></div>
+   <div><h4>Explore</h4><ul><li><a href="#movies">Now Showing</a></li><li><a href="#bookings">My Bookings</a></li><li><a href="#offers">Offers</a></li></ul></div>
+   <div><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Refund Policy</a></li><li><a href="#">Terms</a></li></ul></div>
+   <div><h4>Contact</h4><ul><li>support@cinebook.example</li><li>+1 555 0142</li></ul></div>
+  </div>
+  <div class="copy">© <span id="yr">2026</span> CineBook. All rights reserved.</div>
+ </div>
+</footer>
+
+<!-- booking modal -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+ <div class="modal">
+  <button class="close" id="close" aria-label="Close">✕</button>
+
+  <div id="step1">
+   <div class="m-head">
+    <div class="m-poster" id="mPoster"></div>
+    <div><h2 id="mTitle"></h2><div id="mMeta" style="color:var(--gold);font-size:.9rem"></div><p id="mDesc"></p></div>
+   </div>
+   <div class="label">Choose a date</div><div class="row" id="dates"></div>
+   <div class="label">Choose a showtime</div><div class="row" id="times"></div>
+   <div id="seatArea" class="hide">
+    <div class="label">Choose your seats</div>
+    <div class="screen"></div><div class="screen-l">SCREEN</div>
+    <div class="seats" id="seats"></div>
+    <div class="legend"><span style="--c:#3b4075">Standard $10</span><span style="--c:#6a5a20">Premium $14</span><span style="--c:var(--red)">Selected</span><span style="--c:#14162b">Taken</span></div>
+   </div>
+   <div class="summary">
+    <div><small id="sumText">Select a date, time and seats</small><b id="sumPrice">$0.00</b></div>
+    <button class="btn" id="toPay" disabled>Continue</button>
+   </div>
+  </div>
+
+  <div id="step2" class="hide">
+   <h2>Your details</h2>
+   <p style="color:var(--muted)" id="payInfo"></p>
+   <form class="form" id="payForm" novalidate>
+    <div><label for="fn">Full name</label><input id="fn" autocomplete="name"><div class="err" id="e-fn"></div></div>
+    <div><label for="em">Email</label><input id="em" type="email" autocomplete="email"><div class="err" id="e-em"></div></div>
+    <div><label for="cn">Card number</label><input id="cn" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" autocomplete="cc-number"><div class="err" id="e-cn"></div></div>
+    <div><label for="ex">Expiry (MM/YY)</label><input id="ex" maxlength="5" placeholder="08/29" autocomplete="cc-exp"><div class="err" id="e-ex"></div></div>
+    <div style="grid-column:1/-1;display:flex;gap:.8rem;flex-wrap:wrap">
+     <button type="button" class="btn ghost" id="back">Back</button>
+     <button type="submit" class="btn" id="payBtn">Pay and confirm</button>
+    </div>
+   </form>
+  </div>
+
+  <div id="step3" class="hide">
+   <div class="ticket">
+    <div style="font-size:3rem">🎟️</div>
+    <h2>Booking confirmed</h2>
+    <p id="tInfo"></p>
+    <div class="code" id="tCode"></div>
+    <p>Show this code at the cinema entrance. You can find this booking anytime under My Bookings.</p>
+    <div class="acts">
+     <button class="btn" id="viewBk">View my bookings</button>
+     <button class="btn ghost" id="done">Close</button>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+ var $=function(s){return document.querySelector(s)};
+ var movies=[
+  {id:1,t:"Skyline Protocol",g:"Action",r:8.1,d:"2h 05m",e:"🚁",c:"#ff3d57,#7b2ff7",s:"A rogue pilot has one night to stop a hijacked satellite from striking a major city."},
+  {id:2,t:"Laugh Lines",g:"Comedy",r:7.4,d:"1h 42m",e:"😂",c:"#f7971e,#ffd200",s:"Three rival stand-up comedians get stuck together on a cross-country tour bus."},
+  {id:3,t:"The Last Letter",g:"Drama",r:8.6,d:"2h 18m",e:"✉️",c:"#134e5e,#71b280",s:"A retired teacher finds a letter that sends her back to the town she left forty years ago."},
+  {id:4,t:"Orbit Zero",g:"Sci-Fi",r:8.3,d:"2h 30m",e:"🚀",c:"#0f2027,#2c5364",s:"A crew on a deep-space mission discovers their ship is repeating the same 24 hours."},
+  {id:5,t:"Hollow House",g:"Horror",r:7.0,d:"1h 51m",e:"👻",c:"#232526,#7a1f1f",s:"A family renovating an old home finds a room that is not on any floor plan."},
+  {id:6,t:"Iron Circuit",g:"Action",r:7.7,d:"2h 12m",e:"🏎️",c:"#00c6ff,#0072ff",s:"An underground racing champion is pulled into one last job across three countries."},
+  {id:7,t:"Weekend Wedding",g:"Comedy",r:7.2,d:"1h 38m",e:"💍",c:"#ee9ca7,#ffdde1",s:"Everything that can go wrong at a destination wedding does, all in one weekend."},
+  {id:8,t:"Neon Archive",g:"Sci-Fi",r:8.0,d:"2h 02m",e:"🤖",c:"#8e2de2,#4a00e0",s:"An archivist in a city of androids uncovers a memory that was never meant to be saved."}
+ ];
+ var times=["10:30 AM","1:45 PM","4:30 PM","7:15 PM","10:00 PM"];
+ var rows="ABCDEFGH".split(""),cols=12,vipRows=["F","G","H"];
+ var price={std:10,vip:14};
+ var state={movie:null,date:null,time:null,seats:[]};
+ var lastCode=null;
+
+ function grad(c){return"background:linear-gradient(135deg,"+c+")"}
+ var toast=$("#toast"),tt;
+ function say(m){toast.textContent=m;toast.classList.add("show");clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove("show")},2400)}
+
+ /* ---------- saved bookings (browser storage) ---------- */
+ var STORE="cinebook_bookings";
+ function load(){try{return JSON.parse(localStorage.getItem(STORE))||[]}catch(e){return[]}}
+ function save(list){try{localStorage.setItem(STORE,JSON.stringify(list))}catch(e){say("Could not save booking in this browser")}}
+
+ function renderBookings(){
+  var list=load().slice().reverse();
+  var nc=$("#navCount");nc.textContent=list.length;nc.classList.toggle("hide",!list.length);
+  $("#bkList").innerHTML=list.length?list.map(function(b){
+   return '<article class="bk'+(b.code===lastCode?' new':'')+'" id="bk-'+b.code+'">'+
+    '<div class="bk-p" style="'+grad(b.c)+'">'+b.e+'</div>'+
+    '<div><h3>'+b.t+'</h3><p>'+b.dateLabel+' · '+b.time+'</p><p>Seats: '+b.seats.join(", ")+'</p><div class="code">'+b.code+'</div></div>'+
+    '<div class="bk-side"><b>$'+b.total.toFixed(2)+'</b><button class="btn ghost sm cancel" data-code="'+b.code+'">Cancel booking</button></div>'+
+   '</article>';
+  }).join(""):'<p class="empty">You have no bookings yet. Pick a movie above to book your first ticket.</p>';
+ }
+ $("#bkList").onclick=function(e){
+  var b=e.target.closest(".cancel");if(!b)return;
+  if(!confirm("Cancel this booking? The seats will be released."))return;
+  save(load().filter(function(x){return x.code!==b.dataset.code}));
+  renderBookings();say("Booking cancelled");
+ };
+
+ /* ---------- movie list ---------- */
+ var genre="All",query="";
+ function render(){
+  var list=movies.filter(function(m){return(genre==="All"||m.g===genre)&&m.t.toLowerCase().indexOf(query)>-1});
+  $("#grid").innerHTML=list.length?list.map(function(m){
+   return '<button class="movie" data-id="'+m.id+'"><div class="poster" style="'+grad(m.c)+'">'+m.e+'<span class="rating">★ '+m.r+'</span></div><div class="info"><h3>'+m.t+'</h3><p>'+m.g+' · '+m.d+'</p><span class="btn" style="display:block;text-align:center;padding:.5em">Book tickets</span></div></button>';
+  }).join(""):'<p class="empty">No movies match your search.</p>';
+ }
+ $("#chips").onclick=function(e){var b=e.target.closest(".chip");if(!b)return;
+  genre=b.dataset.g;[].forEach.call(document.querySelectorAll(".chip"),function(c){c.classList.toggle("on",c===b)});render()};
+ $("#searchForm").onsubmit=function(e){e.preventDefault();query=$("#q").value.trim().toLowerCase();render();location.hash="#movies"};
+ $("#q").oninput=function(){query=this.value.trim().toLowerCase();render()};
+ $("#grid").onclick=function(e){var b=e.target.closest(".movie");if(b)openModal(+b.dataset.id)};
+
+ /* ---------- dates ---------- */
+ function days(){var out=[],d=new Date();for(var i=0;i<5;i++){out.push(new Date(d.getFullYear(),d.getMonth(),d.getDate()+i))}return out}
+ function fmt(d){return d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
+
+ /* ---------- modal ---------- */
+ function show(step){["#step1","#step2","#step3"].forEach(function(s){$(s).classList.toggle("hide",s!==step)})}
+ function openModal(id){
+  var m=movies.filter(function(x){return x.id===id})[0];
+  state={movie:m,date:null,time:null,seats:[]};
+  $("#mPoster").style.cssText=grad(m.c);$("#mPoster").textContent=m.e;
+  $("#mTitle").textContent=m.t;$("#mMeta").textContent="★ "+m.r+"  ·  "+m.g+"  ·  "+m.d;$("#mDesc").textContent=m.s;
+  $("#dates").innerHTML=days().map(function(d,i){return'<button class="opt" data-i="'+i+'">'+fmt(d)+'</button>'}).join("");
+  $("#times").innerHTML=times.map(function(t){return'<button class="opt" data-t="'+t+'">'+t+'<small>Screen '+(1+t.length%4)+'</small></button>'}).join("");
+  $("#seatArea").classList.add("hide");
+  show("#step1");update();
+  $("#overlay").classList.add("open");document.body.style.overflow="hidden";$("#close").focus();
+ }
+ function closeModal(){$("#overlay").classList.remove("open");document.body.style.overflow=""}
+ $("#close").onclick=closeModal;
+ $("#overlay").onclick=function(e){if(e.target===this)closeModal()};
+ document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal()});
+
+ $("#dates").onclick=function(e){var b=e.target.closest(".opt");if(!b)return;
+  state.date=days()[+b.dataset.i];pick("#dates",b);buildSeats()};
+ $("#times").onclick=function(e){var b=e.target.closest(".opt");if(!b)return;
+  state.time=b.dataset.t;pick("#times",b);buildSeats()};
+ function pick(sel,btn){[].forEach.call(document.querySelectorAll(sel+" .opt"),function(o){o.classList.toggle("on",o===btn)})}
+
+ /* ---------- seats ---------- */
+ function key(){return state.movie.id+"|"+state.date.toDateString()+"|"+state.time}
+ function takenFor(){
+  var k=key(),seed=0,t=[];
+  for(var i=0;i<k.length;i++)seed=(seed*31+k.charCodeAt(i))%9973;
+  rows.forEach(function(r){for(var c=1;c<=cols;c++){seed=(seed*1103+12345)%9973;if(seed%100<22)t.push(r+c)}});
+  /* seats you booked earlier for this same show are also taken */
+  load().forEach(function(b){if(b.key===k)t=t.concat(b.seats)});
+  return t;
+ }
+ function buildSeats(){
+  state.seats=[];update();
+  if(!state.date||!state.time){$("#seatArea").classList.add("hide");return}
+  var taken=takenFor();
+  $("#seats").innerHTML=rows.map(function(r){
+   var h='<div class="srow"><i>'+r+'</i>';
+   for(var c=1;c<=cols;c++){
+    var id=r+c,vip=vipRows.indexOf(r)>-1;
+    h+='<button class="seat'+(vip?' vip':'')+'" data-id="'+id+'" aria-label="Seat '+id+'"'+(taken.indexOf(id)>-1?' disabled':'')+'></button>';
+    if(c===6)h+='<span class="gap"></span>';
+   }
+   return h+'</div>';
+  }).join("");
+  $("#seatArea").classList.remove("hide");
+ }
+ $("#seats").onclick=function(e){var b=e.target.closest(".seat");if(!b||b.disabled)return;
+  var id=b.dataset.id,i=state.seats.indexOf(id);
+  if(i>-1){state.seats.splice(i,1);b.classList.remove("sel")}
+  else{if(state.seats.length>=8){say("You can book up to 8 seats at once");return}state.seats.push(id);b.classList.add("sel")}
+  update()};
+
+ function total(){return state.seats.reduce(function(s,id){return s+(vipRows.indexOf(id[0])>-1?price.vip:price.std)},0)}
+ function update(){
+  var n=state.seats.length;
+  $("#sumPrice").textContent="$"+total().toFixed(2);
+  $("#sumText").textContent=n?n+" seat"+(n>1?"s":"")+": "+state.seats.slice().sort().join(", "):"Select a date, time and seats";
+  $("#toPay").disabled=!n;
+ }
+
+ /* ---------- checkout ---------- */
+ $("#toPay").onclick=function(){
+  $("#payInfo").textContent=state.movie.t+" · "+fmt(state.date)+" · "+state.time+" · Seats "+state.seats.slice().sort().join(", ")+" · Total $"+total().toFixed(2);
+  show("#step2")};
+ $("#back").onclick=function(){show("#step1")};
+ $("#cn").oninput=function(){this.value=this.value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim()};
+ $("#ex").oninput=function(){var v=this.value.replace(/\D/g,"").slice(0,4);this.value=v.length>2?v.slice(0,2)+"/"+v.slice(2):v};
+ function check(id,msg,fn){var f=$("#"+id),ok=fn(f.value.trim());$("#e-"+id).textContent=ok?"":msg;f.setAttribute("aria-invalid",!ok);return ok}
+ $("#payForm").onsubmit=function(e){
+  e.preventDefault();
+  var a=check("fn","Enter your full name.",function(v){return v.length>1});
+  var b=check("em","Enter a valid email.",function(v){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)});
+  var c=check("cn","Enter a 16-digit card number.",function(v){return v.replace(/\s/g,"").length===16});
+  var d=check("ex","Use MM/YY format.",function(v){var m=/^(\d\d)\/(\d\d)$/.exec(v);return m&&+m[1]>=1&&+m[1]<=12});
+  if(!(a&&b&&c&&d))return;
+
+  var code="CB"+Math.random().toString(36).slice(2,8).toUpperCase();
+  var seats=state.seats.slice().sort();
+  var list=load();
+  list.push({code:code,key:key(),t:state.movie.t,e:state.movie.e,c:state.movie.c,dateLabel:fmt(state.date),time:state.time,seats:seats,total:total()});
+  save(list);
+  lastCode=code;
+  renderBookings();
+
+  $("#tInfo").textContent=state.movie.t+" · "+fmt(state.date)+" · "+state.time+" · Seats "+seats.join(", ");
+  $("#tCode").textContent=code;
+  show("#step3");this.reset();
+ };
+ $("#done").onclick=closeModal;
+ $("#viewBk").onclick=function(){
+  closeModal();
+  var el=document.getElementById("bk-"+lastCode)||$("#bookings");
+  el.scrollIntoView({behavior:"smooth",block:"center"});
+ };
+
+ /* ---------- menu ---------- */
+ var burger=$("#burger"),menu=$("#menu");
+ burger.onclick=function(){var o=menu.classList.toggle("open");burger.setAttribute("aria-expanded",o)};
+ menu.onclick=function(e){if(e.target.closest("a"))menu.classList.remove("open")};
+ $("#yr").textContent=new Date().getFullYear();
+
+ render();
+ renderBookings();
+})();
+</script>
+</body>
+</html>
